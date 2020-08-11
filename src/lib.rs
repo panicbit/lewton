@@ -27,7 +27,7 @@ extern crate ogg;
 #[macro_use]
 extern crate futures;
 #[cfg(feature = "async_ogg")]
-extern crate tokio_io;
+extern crate tokio;
 
 macro_rules! try {
 	($expr:expr) => (match $expr {
