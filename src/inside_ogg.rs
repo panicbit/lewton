@@ -14,13 +14,13 @@ and useful helper methods for the Ogg `PacketReader` struct.
 */
 
 use ogg::{PacketReader, Packet};
-use header::*;
-use VorbisError;
+use crate::header::*;
+use crate::VorbisError;
 use std::io::{Read, Seek};
-use ::audio::{PreviousWindowRight, read_audio_packet,
+use crate::audio::{PreviousWindowRight, read_audio_packet,
 	read_audio_packet_generic};
-use ::header::HeaderSet;
-use ::samples::{Samples, InterleavedSamples};
+use crate::header::HeaderSet;
+use crate::samples::{Samples, InterleavedSamples};
 
 /// Reads the three vorbis headers from an ogg stream as well as stream serial information
 ///

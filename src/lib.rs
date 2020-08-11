@@ -29,15 +29,6 @@ extern crate futures;
 #[cfg(feature = "async_ogg")]
 extern crate tokio;
 
-macro_rules! try {
-	($expr:expr) => (match $expr {
-		$crate::std::result::Result::Ok(val) => val,
-		$crate::std::result::Result::Err(err) => {
-			return Err($crate::std::convert::From::from(err));
-		}
-	})
-}
-
 /*
 // This little thing is very useful.
 macro_rules! try {

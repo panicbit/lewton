@@ -102,7 +102,7 @@ fn compute_bitreverse(blocksize :u8) -> Vec<u32> {
 	let n8 = n >> 3;
 	let mut rev = Vec::with_capacity(n8);
 	for i in 0 .. n8 {
-		rev.push((::bit_reverse(i as u32) as u32 >> (32 - ld + 3)) << 2);
+		rev.push((crate::bit_reverse(i as u32) as u32 >> (32 - ld + 3)) << 2);
 	}
 	return rev;
 }
