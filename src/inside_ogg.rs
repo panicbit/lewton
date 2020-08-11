@@ -264,12 +264,33 @@ pub mod async_api {
 	use ogg::OggReadError;
 	use ogg::reading::async_api::PacketReader;
 	use futures::stream::Stream;
-	use futures::Future;
+	use futures::{StreamExt, Future};
 	use tokio::io::AsyncRead;
 	use std::io::{Error, ErrorKind};
 	use std::mem::replace;
 	use std::pin::Pin;
 	use std::task::{Poll, Context};
+
+	pub async fn read_headers<T: AsyncRead + Unpin>(rdr: &mut PacketReader<T>) -> Result<HeaderSet, VorbisError> {
+		macro_rules! rd_pck {
+			() => {
+				match rdr.next().await.transpose()? {
+					Some(pck) => pck,
+					None => {
+						Err(OggReadError::from(Error::new(ErrorKind::UnexpectedEof,
+							"Expected ogg packet but found end of physical stream")))?
+					},
+				}
+			}
+		}
+
+		let ident = read_header_ident(&rd_pck!().data)?;
+		let comment = read_header_comment(&rd_pck!().data)?;
+		let setup = read_header_setup(&rd_pck!().data,
+			ident.audio_channels, (ident.blocksize_0, ident.blocksize_1))?;
+
+		Ok((ident, comment, setup))
+	}
 
 	/// Async ready creator utility to read headers out of an
 	/// ogg stream.
